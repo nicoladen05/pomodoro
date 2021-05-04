@@ -13,12 +13,14 @@ class Pomodoro:
     # Return the remaining pomodoro time
     def time(self):
         try:
+            # changing the variable seconds_total won't change self.seconds_total
+            seconds_total = self.seconds_total
             # calculate seconds_total back to readable time
-            hours = round((self.seconds_total - self.seconds_total % 3600) / 3600)
-            self.seconds_total -= hours * 3600
-            minutes = round((self.seconds_total - self.seconds_total % 60) / 60)
-            self.seconds_total -= minutes * 60
-            seconds = round(self.seconds_total)
+            hours = round((seconds_total - seconds_total % 3600) / 3600)
+            seconds_total -= hours * 3600
+            minutes = round((seconds_total - seconds_total % 60) / 60)
+            seconds_total -= minutes * 60
+            seconds = round(seconds_total)
 
             if hours <= 9:
                 hours = '0' + str(hours)
@@ -27,7 +29,7 @@ class Pomodoro:
             if seconds <= 9:
                 seconds = '0' + str(seconds)
 
-            if hours == '0': # If the hours are 0 hide them
+            if hours == '00': # If the hours are 0 hide them
                 result = str(minutes) + ' : ' + str(seconds)
             else:
                 result = str(hours) + ' : ' + str(minutes) + ' : ' + str(seconds)
@@ -36,3 +38,6 @@ class Pomodoro:
 
         except AttributeError: # If the time isn't set yet, return False
             return False
+
+    def plainTime(self): # Return the total remaining seconds
+        return self.seconds_total
