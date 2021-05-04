@@ -2,6 +2,15 @@ import curses
 import pomodoro
 from threading import Thread
 from pyfiglet import Figlet
+from os import name
+
+if name == 'nt': # Import the right notification library depending on the os
+    pass
+else:
+    from gi.repository import Notify # Linux notifications
+    Notify.init('Pomodoro')
+    def notification(text):
+        Notify.Notification.new(text).show()
 
 p = pomodoro.Pomodoro()
 
@@ -34,6 +43,8 @@ def main(s):
         s.addstr(f'\n State: {p.getState()}')
 
         if p.plainTime() == 0: # Change the state after the countdown is finished
+            notification(f'{p.getState().capitalize()} has finished!')
+
             s.addstr('\n Press any key to continue')
             s.getch()
 
