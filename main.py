@@ -31,6 +31,8 @@ curses.cbreak()
 
 s.keypad(True)
 
+s.scrollok(1)
+
 # Set the starting time
 p.setTime(config.studyTime[0], config.studyTime[1], config.studyTime[2])
 
@@ -75,6 +77,9 @@ def main(s):
             s.refresh() # Refresh the screen
         except (KeyboardInterrupt, SystemExit):
             break
+        except curses.error:
+            print("Window too small")
+
     
 countdown_thread = Thread(target=countdown) # Thread to countdown and show the time at the same time
 countdown_thread.daemon = True
