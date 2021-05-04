@@ -16,6 +16,3 @@ class Pomodoro:
             return self.seconds_total
         except AttributeError: # If the time isn't set yet
             return False
-
-p = Pomodoro()
-p.timer(0,0,3)
