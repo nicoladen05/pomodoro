@@ -23,7 +23,7 @@ def countdown():
 def main(s):
     countdown_thread.start() # Start the countdown thread
     while True:
-        text = Figlet(font='standard')
+        text = Figlet(font='big')
 
         s.clear() # Clear the screen
         s.addstr(text.renderText(str(p.time()))) # Print the text which is converted to ascii art by figlet
