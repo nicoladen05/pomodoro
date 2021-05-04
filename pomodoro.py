@@ -1,8 +1,8 @@
 from time import sleep
 
 class Pomodoro:
-    def __init__(self):
-        self.breakCount = 0
+    def __init__(self, breakCount):
+        self.breakCount = breakCount
 
     def setTime(self, hours, minutes, seconds):
         self.seconds_total = seconds + minutes * 60 + hours * 3600 # calculate the total seconds in the given hours, minutes and seconds

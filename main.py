@@ -1,21 +1,24 @@
 import curses
 import pomodoro
+import config
 from threading import Thread
 from pyfiglet import Figlet
 from os import name
 
 if name == 'nt': # Import the right notification library depending on the os
+    # Windows Notification
     from win10toast import ToastNotifier
     toast = ToastNotifier()
     def notification(text):
         toast.show_toast(text)
 else:
-    from gi.repository import Notify # Linux notifications
+    # Linux Notifications
+    from gi.repository import Notify
     Notify.init('Pomodoro')
     def notification(text):
         Notify.Notification.new(text).show()
 
-p = pomodoro.Pomodoro()
+p = pomodoro.Pomodoro(config.shortBreakAmount)
 
 # Initialize curses
 s = curses.initscr()
@@ -26,8 +29,8 @@ curses.cbreak()
 
 s.keypad(True)
 
-# Set the time for the pomodoro
-p.setTime(0,0,10)
+# Set the starting time
+p.setTime(config.studyTime[0], config.studyTime[1], config.studyTime[2])
 
 # Set the starting state
 p.setState('study')
@@ -55,11 +58,11 @@ def main(s):
 
             # Set the next timer length
             if p.getState() == 'study':
-                p.setTime(0,0,25)
+                p.setTime(config.studyTime[0], config.studyTime[1], config.studyTime[2])
             elif p.getState() == 'break':
-                p.setTime(0,0,5)
+                p.setTime(config.breakTime[0], config.breakTime[1], config.breakTime[2])
             elif p.getState() == 'longBreak':
-                p.setTime(0,0,15)
+                p.setTime(config.longBreakTime[0], config.longBreakTime[1], config.longBreakTime[2])
 
             continue
 
