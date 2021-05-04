@@ -55,6 +55,7 @@ def main(s):
                 notification(f'{p.getState().capitalize()} has finished!') # Send a notification
     
                 s.addstr('\n Press any key to continue') # Wait for confirmation
+                curses.flushinp()
                 s.getch()
     
                 p.changeState() # Change the state to the next one
