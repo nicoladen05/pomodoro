@@ -40,16 +40,17 @@ def main(s):
 
         s.addstr(text.renderText(str(p.time()))) # Print the text which is converted to ascii art by figlet
 
-        s.addstr(f'\n State: {p.getState()}')
+        s.addstr(f'\n State: {p.getState().capitalize()}') # Print the current state
 
         if p.plainTime() == 0: # Change the state after the countdown is finished
-            notification(f'{p.getState().capitalize()} has finished!')
+            notification(f'{p.getState().capitalize()} has finished!') # Send a notification
 
-            s.addstr('\n Press any key to continue')
+            s.addstr('\n Press any key to continue') # Wait for confirmation
             s.getch()
 
             p.changeState() # Change the state to the next one
 
+            # Set the next timer length
             if p.getState() == 'study':
                 p.setTime(0,0,25)
             elif p.getState() == 'break':
@@ -65,4 +66,4 @@ def main(s):
 
 countdown_thread = Thread(target=countdown) # Thread to countdown and show the time at the same time
 
-curses.wrapper(main)
+curses.wrapper(main) # Start the main curses ui
