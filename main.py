@@ -18,7 +18,7 @@ else:
     from gi.repository import Notify
     Notify.init('Pomodoro')
     def notification(text):
-        Notify.Notification.new(text).show()
+        Notify.Notification.new('Pomodoro', text, 'icon.png').show()
 
 p = pomodoro.Pomodoro(config.shortBreakAmount)
 
@@ -48,20 +48,20 @@ def main(s):
         try:
             s.clear() # Clear the screen
             text = Figlet(font='big')
-    
+
             s.addstr(text.renderText(str(p.time()))) # Print the text which is converted to ascii art by figlet
-    
+
             s.addstr(f'\n State: {p.getState().capitalize()}') # Print the current state
-    
+
             if p.plainTime() == 0: # Change the state after the countdown is finished
                 notification(f'{p.getState().capitalize()} has finished!') # Send a notification
-    
+
                 s.addstr('\n Press any key to continue') # Wait for confirmation
                 curses.flushinp()
                 s.getch()
-    
+
                 p.changeState() # Change the state to the next one
-    
+
                 # Set the next timer length
                 if p.getState() == 'study':
                     p.setTime(config.studyTime[0], config.studyTime[1], config.studyTime[2])
@@ -69,18 +69,18 @@ def main(s):
                     p.setTime(config.breakTime[0], config.breakTime[1], config.breakTime[2])
                 elif p.getState() == 'longBreak':
                     p.setTime(config.longBreakTime[0], config.longBreakTime[1], config.longBreakTime[2])
-    
+
                 continue
-    
+
             curses.napms(1000) # Sleep for one second
-    
+
             s.refresh() # Refresh the screen
         except (KeyboardInterrupt, SystemExit):
             break
         except curses.error:
             print("Window too small")
 
-    
+
 countdown_thread = Thread(target=countdown) # Thread to countdown and show the time at the same time
 countdown_thread.daemon = True
 
