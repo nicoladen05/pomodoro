@@ -1,14 +1,18 @@
 from time import sleep
 
 class Pomodoro:
+    def __init__(self):
+        self.breakCount = 0
+
     def setTime(self, hours, minutes, seconds):
         self.seconds_total = seconds + minutes * 60 + hours * 3600 # calculate the total seconds in the given hours, minutes and seconds
 
     # Main timer function
     def timer(self):
-        while self.seconds_total > 0:
-            self.seconds_total -= 1
-            sleep(1)
+        while True:
+            while self.seconds_total > 0:
+                self.seconds_total -= 1
+                sleep(1)
 
     # Return the remaining pomodoro time
     def time(self):
@@ -41,3 +45,19 @@ class Pomodoro:
 
     def plainTime(self): # Return the total remaining seconds
         return self.seconds_total
+
+    def changeState(self): # Change the state depending on the previous state
+        if self.state == 'study' and self.breakCount < 4:
+            self.state = 'break'
+            self.breakCount += 1
+        elif self.state == 'study' and self.breakCount >= 4:
+            self.state = 'longBreak'
+            self.breakCount = 0
+        else:
+            self.state = 'study'
+
+    def getState(self): # Get the current state
+        return self.state
+
+    def setState(self, state): # Set the state manually
+        self.state = state
