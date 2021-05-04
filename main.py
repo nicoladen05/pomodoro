@@ -10,7 +10,7 @@ if name == 'nt': # Import the right notification library depending on the os
     from win10toast import ToastNotifier
     toast = ToastNotifier()
     def notification(text):
-        toast.show_toast(text)
+        toast.show_toast('Pomodoro', text)
 else:
     # Linux Notifications
     from gi import require_version
