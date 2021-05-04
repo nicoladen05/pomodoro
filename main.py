@@ -17,20 +17,36 @@ s.keypad(True)
 # Set the time for the pomodoro
 p.setTime(0,0,10)
 
+# Set the starting state
+p.setState('study')
+
 def countdown():
     p.timer()
 
 def main(s):
     countdown_thread.start() # Start the countdown thread
     while True:
+        s.clear() # Clear the screen
         text = Figlet(font='big')
 
-        s.clear() # Clear the screen
         s.addstr(text.renderText(str(p.time()))) # Print the text which is converted to ascii art by figlet
 
-        if p.time() == 0: # Stop the thread and break the while loop when the time is finished
-            countdown_thread.join()
-            break
+        s.addstr(f'\n State: {p.getState()}')
+
+        if p.plainTime() == 0: # Change the state after the countdown is finished
+            s.addstr('\n Press any key to continue')
+            s.getch()
+
+            p.changeState() # Change the state to the next one
+
+            if p.getState() == 'study':
+                p.setTime(0,0,25)
+            elif p.getState() == 'break':
+                p.setTime(0,0,5)
+            elif p.getState() == 'longBreak':
+                p.setTime(0,0,15)
+
+            continue
 
         curses.napms(1000) # Sleep for one second
 
