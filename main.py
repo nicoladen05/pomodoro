@@ -5,7 +5,10 @@ from pyfiglet import Figlet
 from os import name
 
 if name == 'nt': # Import the right notification library depending on the os
-    pass
+    from win10toast import ToastNotifier
+    toast = ToastNotifier()
+    def notification(text):
+        toast.show_toast(text)
 else:
     from gi.repository import Notify # Linux notifications
     Notify.init('Pomodoro')
