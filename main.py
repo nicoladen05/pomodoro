@@ -10,7 +10,7 @@ if name == 'nt': # Import the right notification library depending on the os
     from win10toast import ToastNotifier
     toast = ToastNotifier()
     def notification(text):
-        toast.show_toast('Pomodoro', text, icon_path="icon.ico")
+        toast.show_toast('Pomodoro', text, icon_path="assets/icon.ico")
 else:
     # Linux Notifications
     from gi import require_version
@@ -18,7 +18,7 @@ else:
     from gi.repository import Notify
     Notify.init('Pomodoro')
     def notification(text):
-        Notify.Notification.new('Pomodoro', text, 'icon.png').show()
+        Notify.Notification.new('Pomodoro', text).show()
 
 p = pomodoro.Pomodoro(config.shortBreakAmount)
 
