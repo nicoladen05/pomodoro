@@ -4,6 +4,8 @@ import config
 from threading import Thread
 from pyfiglet import Figlet
 from os import name
+from pypresence import Presence
+from time import time
 
 if name == 'nt': # Import the right notification library depending on the os
     # Windows Notification
@@ -35,6 +37,13 @@ s.scrollok(1)
 
 # Set the starting time
 p.setTime(config.studyTime[0], config.studyTime[1], config.studyTime[2])
+
+# Discord Rich Presence init
+dc_client_id = '839068702581456936'
+dc = Presence(dc_client_id)
+dc.connect()
+
+dc.update(large_image="main_icon", large_text="https://github.com/nicoladen05/pomodoro", state="Focusing...", end=time() + p.plainTime())
 
 # Set the starting state
 p.setState('study')
