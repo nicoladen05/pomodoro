@@ -43,8 +43,6 @@ dc_client_id = '839068702581456936'
 dc = Presence(dc_client_id)
 dc.connect()
 
-dc.update(large_image="main_icon", large_text="https://github.com/nicoladen05/pomodoro", state="Focusing...", end=time() + p.plainTime())
-
 # Set the starting state
 p.setState('study')
 
@@ -53,6 +51,7 @@ def countdown():
 
 def main(s):
     countdown_thread.start() # Start the countdown thread
+    dc.update(large_image="main_icon", large_text="https://github.com/nicoladen05/pomodoro", state="Focusing...", end=time() + p.plainTime()) # Update the rich presence
     while True:
         try:
             s.clear() # Clear the screen
@@ -74,16 +73,20 @@ def main(s):
                 # Set the next timer length
                 if p.getState() == 'study':
                     p.setTime(config.studyTime[0], config.studyTime[1], config.studyTime[2])
+                    dc.update(large_image="main_icon", large_text="https://github.com/nicoladen05/pomodoro", state="Focusing...", end=time() + p.plainTime()) # Update the rich presence
                 elif p.getState() == 'break':
                     p.setTime(config.breakTime[0], config.breakTime[1], config.breakTime[2])
+                    dc.update(large_image="main_icon", large_text="https://github.com/nicoladen05/pomodoro", state="Taking a break", end=time() + p.plainTime()) # Update the rich presence
                 elif p.getState() == 'longBreak':
                     p.setTime(config.longBreakTime[0], config.longBreakTime[1], config.longBreakTime[2])
+                    dc.update(large_image="main_icon", large_text="https://github.com/nicoladen05/pomodoro", state="Taking a long break", end=time() + p.plainTime()) # Update the rich presence
 
                 continue
 
-            curses.napms(1000) # Sleep for one second
 
             s.refresh() # Refresh the screen
+
+            curses.napms(1000) # Sleep for one second
         except (KeyboardInterrupt, SystemExit):
             break
         except curses.error:
