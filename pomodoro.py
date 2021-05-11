@@ -61,14 +61,3 @@ class Pomodoro:
 
     def setState(self, state): # Set the state manually
         self.state = state
-
-class Tasks:
-    def addTask(self, task):
-        with open(tasks, a) as tasks:
-            tasks.write(task)
-            tasks.close()
-
-    def getTasks(self):
-        with open(tasks, r) as tasks:
-            return [task.rstrip() for task in tasks]
-            tasks.close()

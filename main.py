@@ -83,7 +83,6 @@ def main(s):
 
                 continue
 
-
             s.refresh() # Refresh the screen
 
             curses.napms(1000) # Sleep for one second
