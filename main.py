@@ -4,7 +4,6 @@ import config
 from threading import Thread
 from pyfiglet import Figlet
 from os import name
-from pypresence import Presence
 from time import time
 
 if name == 'nt': # Import the right notification library depending on the os
@@ -13,6 +12,8 @@ if name == 'nt': # Import the right notification library depending on the os
     toast = ToastNotifier()
     def notification(text):
         toast.show_toast('Pomodoro', text, icon_path="assets/icon.ico")
+elif name == 'posix':
+        pass
 else:
     # Linux Notifications
     from gi import require_version
@@ -38,10 +39,17 @@ s.scrollok(1)
 # Set the starting time
 p.setTime(config.studyTime[0], config.studyTime[1], config.studyTime[2])
 
-# Discord Rich Presence init
-dc_client_id = '839068702581456936'
-dc = Presence(dc_client_id)
-dc.connect()
+class Discord:
+    def __init__(self):
+        if config.discordPresence:
+            from pypresence import Presence
+            dc_client_id = '839068702581456936'
+            dc = Presence(dc_client_id)
+            dc.connect()
+    def discord_update(self, state, time):
+        if config.discordPresence:
+            self.unix = time() + self.time
+            dc.update(large_image="main_icon", large_text="https://github.com/nicoladen05/pomodoro", state=self.state, end=self.unix) # Update the rich presence
 
 # Set the starting state
 p.setState('study')
@@ -51,7 +59,9 @@ def countdown():
 
 def main(s):
     countdown_thread.start() # Start the countdown thread
-    dc.update(large_image="main_icon", large_text="https://github.com/nicoladen05/pomodoro", state="Focusing...", end=time() + p.plainTime()) # Update the rich presence
+    #dc.update(large_image="main_icon", large_text="https://github.com/nicoladen05/pomodoro", state="Focusing...", end=time() + p.plainTime()) # Update the rich presence
+    dc = Discord()
+    dc.discord_update("Focusing...", time() + p.plainTime())
     while True:
         try:
             s.clear() # Clear the screen
@@ -73,13 +83,16 @@ def main(s):
                 # Set the next timer length
                 if p.getState() == 'study':
                     p.setTime(config.studyTime[0], config.studyTime[1], config.studyTime[2])
-                    dc.update(large_image="main_icon", large_text="https://github.com/nicoladen05/pomodoro", state="Focusing...", end=time() + p.plainTime()) # Update the rich presence
+                    #dc.update(large_image="main_icon", large_text="https://github.com/nicoladen05/pomodoro", state="Focusing...", end=time() + p.plainTime()) # Update the rich presence
+                    dc.discord_update("Focusing...", p.plainTime())
                 elif p.getState() == 'break':
                     p.setTime(config.breakTime[0], config.breakTime[1], config.breakTime[2])
-                    dc.update(large_image="main_icon", large_text="https://github.com/nicoladen05/pomodoro", state="Taking a break", end=time() + p.plainTime()) # Update the rich presence
+                    #dc.update(large_image="main_icon", large_text="https://github.com/nicoladen05/pomodoro", state="Taking a break", end=time() + p.plainTime()) # Update the rich presence
+                    dc.discord_update("Taking a break", p.plainTime())
                 elif p.getState() == 'longBreak':
                     p.setTime(config.longBreakTime[0], config.longBreakTime[1], config.longBreakTime[2])
-                    dc.update(large_image="main_icon", large_text="https://github.com/nicoladen05/pomodoro", state="Taking a long break", end=time() + p.plainTime()) # Update the rich presence
+                    #dc.update(large_image="main_icon", large_text="https://github.com/nicoladen05/pomodoro", state="Taking a long break", end=time() + p.plainTime()) # Update the rich presence
+                    dc.discord_update("Taking a long break", p.plainTime())
 
                 continue
 
